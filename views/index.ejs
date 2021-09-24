@@ -33,10 +33,7 @@
     <script>
 
         $(document).ready(function () {
-            get_goods()
-            $("#categorySelect").on("change", function () {
-                get_goods($(this).val())
-            })
+            get_write()
         })
 
         function sign_out() {
@@ -45,17 +42,17 @@
             window.location.href = "/"
         }
 
-        function get_goods(category) {
-            $("#goodsList").empty()
+        function get_write(category) {
+            $("#write").empty()
             console.log(category)
             $.ajax({
                 type: "GET",
-                url: `/api/goods${category ? "?category=" + category : ""}`,
+                url: `/api/write${category ? "?category=" + category : ""}`,
                 data: {},
                 success: function (response) {
-                    let goods = response["goods"]
-                    for (let i = 0; i < goods.length; i++) {
-                        make_card(goods[i])
+                    let write = response["write"]
+                    for (let i = 0; i < write.length; i++) {
+                        make_card(write[i])
 
                     }
                 }
@@ -63,27 +60,18 @@
         }
 
         function make_card(item) {
-            let htmlTemp = `<div>
-                                    <div class="card mb-2" onclick="location.href='/detail?goodsId=${item["goodsId"]}'">
-                                        <div class="row no-gutters">
-                                            <div class="col-sm-5" style="background: #868e96;">
-                                                <img src="${item["thumbnailUrl"]}"
-                                                     class="card-img-top h-100" alt="...">
-                                            </div>
-                                            <div class="col-sm-7 d-flex">
-                                                <div class="card-body flex-fill">
-                                                    <div class="card-title mb-auto">
-                                                        <h5 style="display: inline">${item["name"]}</h5>
-                                                        <span class="card-price ml-2">$${number2decimals(item["price"])}</span>
-                                                    </div>
-                                                    <span class="badge badge-secondary">${item["category"]}</span>
-                                                    <!--                                <p class="card-text"><small class="text-muted">drink</small></p>-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>`
-            $("#goodsList").append(htmlTemp)
+            let htmlTemp = `<tr>
+                <th>
+                    ${item["writeId"]}
+                </th>
+                <th>
+                    ${item["title"]}
+                </th>
+                <th>
+                    ${item["name"]}
+                </th>
+            </tr>`
+            $("#write").append(htmlTemp)
         }
 
         function makeNoti(data) {
@@ -115,7 +103,7 @@
     <nav class="navbar navbar-expand-sm navbar-dark bg-sparta justify-content-end">
         <a class="navbar-brand" href="/goods">
             <img src ="/static/mylogo.png" width="200" height="80" class="glyphicon glyphicon-home" alt="">
-            스파르타 쇼핑몰
+            르베니아 블로그요!
         </a>
         <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true"
@@ -123,13 +111,13 @@
         <div class="navbar-collapse collapse flex-grow-0 ml-auto" id="navbarSupportedContent" style="">
             <ul class="navbar-nav mr-auto text-right">
                 <li class="nav-item" id="link-cart">
-                    <a class="nav-link" href="/cart">
-                        장바구니<i class="fa fa-shopping-cart ml-2" aria-hidden="true"></i>
+                    <a class="nav-link" href="/upwrite">
+                        게시글작성<i class="fa fa-shopping-cart ml-2" aria-hidden="true"></i>
                     </a>
                 </li>
                 <li class="nav-item" id="link-logout">
                     <a class="nav-link" data-toggle="modal" data-target="#signOutModal">
-                        로그아웃<i class="fa fa-sign-out ml-2" aria-hidden="true"></i>
+                        test<i class="fa fa-sign-out ml-2" aria-hidden="true"></i>
                     </a>
                     <div class="modal text-left" id="signOutModal" tabindex="-1" role="dialog"
                         aria-labelledby="signOutModalLabel" aria-hidden="true">
@@ -160,37 +148,34 @@
     </nav>
     <div class="wrap">
         <div>
-            <div class="form-group row mr-0">
-                <label for="categorySelect" class="col-4 col-form-label">카테고리</label>
-                <select class="form-control col-8" id="categorySelect">
-                    <option value="" selected>전체</option>
-                    <option value="drink">음료</option>
-                    <option value="food">음식</option>
-                </select>
-            </div>
-        </div>
-        <div id="goodsList" class="mb-5">
-            <div>
-                <div class="card mb-2" onclick="location.href='#'">
-                    <div class="row no-gutters">
-                        <div class="col-sm-5" style="background: #868e96;">
-                            <img src="https://cdn.pixabay.com/photo/2016/09/07/19/54/wines-1652455_1280.jpg"
-                                class="card-img-top h-100" alt="...">
-                        </div>
-                        <div class="col-sm-7 d-flex">
-                            <div class="card-body flex-fill">
-                                <div class="card-title mb-auto">
-                                    <h5 style="display: inline">상품 1</h5>
-                                    <span class="card-price ml-2">$6.20</span>
-
-                                </div>
-                                <span class="badge badge-secondary">drink</span>
-                                <!--                                <p class="card-text"><small class="text-muted">drink</small></p>-->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            번호
+                        </th>
+                        <th>
+                            제목
+                        </th>
+                        <th>
+                            작성자
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id = "write">
+                    <tr>
+                        <th>
+                            1
+                        </th>
+                        <th>
+                            테스트
+                        </th>
+                        <th>
+                            멀봐씨발아
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

@@ -12,6 +12,9 @@ const writeSchema = new Schema({
     required: true,
     unique: true
   },
+  name:{
+    tpye: String
+  },
   body:{
     tpye: String
   },

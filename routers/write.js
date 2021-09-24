@@ -26,14 +26,13 @@ router.get("/write/:writeId", async (req, res) => {
 
 //게시물 작성
 router.post('/write', async (req, res) => {
-    const { writeId, title, body, pw } = req.body;
+    const { title, name, body, pw } = req.body;
+    writeId = await write.count() + 1;
     var newDate = new Date();
     var date = newDate.toFormat('YYYY,MM,DD HH24:MI:SS')
     try {
-        isExist = await write.find({ writeId });
-        if (isExist.length == 0) {
-            await write.create({ writeId, title, body, date, pw });
-        }
+        await write.create({ writeId, title, name, body, date, pw });
+        
         res.send({ result: "success" });
     }
     catch {
