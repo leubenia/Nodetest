@@ -10,7 +10,6 @@ const writeSchema = new Schema({
   title: {
     type: String,
     required: true,
-    unique: true
   },
   name:{
     tpye: String
@@ -19,7 +18,7 @@ const writeSchema = new Schema({
     tpye: String
   },
   date: {
-    type: Number
+    type: String
   },
   pw: {
     type: String

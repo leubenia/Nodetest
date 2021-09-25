@@ -14,7 +14,7 @@ const writeRouter = require("./routers/write");
 app.use("/api", [writeRouter]);
 
 app.use((req, res, next) => {
-  console.log(req);
+  // console.log(req);
   next();
 });
 
@@ -29,7 +29,7 @@ app.get('/', (req, res, next) => {
 //게시물 한가지
 app.get('/write',(req, res)=>{
     let num = req.query.name;
-    res.render('detaill',{num})
+    res.render('write',{num})
 })
 
 //게시물 올리기

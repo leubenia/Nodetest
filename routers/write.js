@@ -8,8 +8,8 @@ const router = express.Router();
 router.get("/write", async (req, res, next) => {
     try {
         const { category } = req.query;
-        const write = await write.find({ category }).sort("-writeId");
-        res.json({ write: write });
+        const writes = await write.find({ category }).sort("-writeId");
+        res.json({ write: writes });
     } catch (err) {
         console.error(err);
         next(err);
@@ -30,6 +30,7 @@ router.post('/write', async (req, res) => {
     writeId = await write.count() + 1;
     var newDate = new Date();
     var date = newDate.toFormat('YYYY,MM,DD HH24:MI:SS')
+    console.log(title, name, body, pw)
     try {
         await write.create({ writeId, title, name, body, date, pw });
         

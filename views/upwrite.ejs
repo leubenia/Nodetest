@@ -33,16 +33,18 @@
     <script>
 
         function up_write() {
-            title = $("#title").text
-            name = $("#name").text
-            body = $("#test").text
-            pw = $("pw").text
+            
+            let title = $("#title").val()
+            let name = $("#name").val()
+            let body = $("#test").val()
+            let pw = $("#pw").val()
+            console.log(title,name,body,pw)
             $.ajax({
                 type: "POST",
                 url: `/api/write`,
                 data: {title : title, name : name,  body : body , pw : pw},
                 success: function (response) {
-                    console.log("완료했습니다.")
+                    console.log(response["result"])
                 }
             })
         }
@@ -52,14 +54,14 @@
 
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-sparta justify-content-end">
-        <a class="navbar-brand" href="/goods">
+        <a class="navbar-brand" href="/">
             <img src ="/static/mylogo.png" width="200" height="80" class="glyphicon glyphicon-home" alt="">
             르베니아 블로그요!
         </a>
         <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true"
             aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <div class="navbar-collapse collapse flex-grow-0 ml-auto" id="navbarSupportedContent" style="">
+        <div class="navbar-collapse collapse flex-grow-0 ml-auto" id="navbarSupportedContent" >
             <ul class="navbar-nav mr-auto text-right">
                 <li class="nav-item" id="link-cart">
                     <a class="nav-link" href="/upwrite">
