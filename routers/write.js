@@ -1,5 +1,6 @@
 const express = require("express");
 const write = require("../schemas/write");
+const v1 = require("uuid")
 require('date-utils');
 
 const router = express.Router();
@@ -25,18 +26,20 @@ router.get("/write/:writeId", async (req, res) => {
 
 
 //게시물 작성
-router.post('/write', async (req, res) => {
+router.post('/write', async(req, res) => {
+    
     const { title, name, body, pw } = req.body;
-    writeId = await write.count() + 1;
-    var newDate = new Date();
-    var date = newDate.toFormat('YYYY,MM,DD HH24:MI:SS')
-    console.log(title, name, body, pw)
-    try {
+    let writeId = v1.v1()
+    console.log(title, name)
+    console.log("----------------------------------------------")
+    let newDate = new Date();
+    let date = newDate.toFormat('YYYY,MM,DD HH24:MI:SS')
+    try{
         await write.create({ writeId, title, name, body, date, pw });
-        
         res.send({ result: "success" });
     }
-    catch {
+    catch (err){
+        console.log(err)
         res.send({ result: "err" });
     }
 });

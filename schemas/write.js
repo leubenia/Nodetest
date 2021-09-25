@@ -3,25 +3,32 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const writeSchema = new Schema({
   writeId: {
-    type: Number,
+    type: String,
     required: true,
     unique: true
   },
   title: {
     type: String,
     required: true,
+    unique: false
   },
   name:{
-    tpye: String
+    type: String,
+    required: true,
+    unique: false
   },
   body:{
-    tpye: String
+    type: String,
+    required: true,
+    unique: false
   },
   date: {
-    type: String
+    type: String,
+    required: true
   },
   pw: {
-    type: String
+    type: String,
+    required: true
   },
 });
 

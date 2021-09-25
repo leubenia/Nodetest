@@ -26,14 +26,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
 
-    
+
 
     <link href="/static/mystyle.css" rel="stylesheet">
     <title>르베니아 게시판 | 게시판</title>
     <script>
-
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const writeId = urlParams.get("writeId");
         $(document).ready(function () {
-            get_write()
+            //get_write()
         })
 
         function sign_out() {
@@ -42,36 +44,29 @@
             window.location.href = "/"
         }
 
-        function get_write(category) {
-            $("#write").empty()
-            console.log(category)
+        function get_detail() {
             $.ajax({
                 type: "GET",
-                url: `/api/write${category ? "?category=" + category : ""}`,
+                url: `/api/write/${writeId}`,
                 data: {},
-                success: function (response) {
-                    let write = response["write"]
-                    for (let i = 0; i < write.length; i++) {
-                        make_card(write[i])
-
+                error: function (xhr, status, error) {
+                    if (status == 404) {
+                        alert("존재하지 않는 게시글입니다.");
                     }
-                }
-            })
-        }
+                    window.location.href = "/";
+                },
+                success: function (response) {
+                    let writeDetail = response["detail"];
+                    $("#goodsUrl").attr("src", writeDetail["thumbnailUrl"]);
+                    $("#goodsName").text(writeDetail["name"]);
+                    $("#goodsPrice").text("$" + number2decimals(goodsDetail["price"]));
 
-        function make_card(item) {
-            let htmlTemp = `<tr>
-                <th>
-                    ${item["writeId"]}
-                </th>
-                <th>
-                    ${item["title"]}
-                </th>
-                <th>
-                    ${item["name"]}
-                </th>
-            </tr>`
-            $("#write").append(htmlTemp)
+                    sessionStorage.setItem("writeId", writeId);
+                    sessionStorage.setItem("goodsName", goodsDetail["name"]);
+                    sessionStorage.setItem("goodsPrice", goodsDetail["price"]);
+                    
+                }
+            });
         }
 
         function number2decimals(num) {
@@ -92,7 +87,7 @@
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-sparta justify-content-end">
         <a class="navbar-brand" href="/">
-            <img src ="/static/mylogo.png" width="200" height="80" class="glyphicon glyphicon-home" alt="">
+            <img src="/static/mylogo.png" width="200" height="80" class="glyphicon glyphicon-home" alt="">
             르베니아 블로그요!
         </a>
         <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
@@ -152,7 +147,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody id = "write">
+                <tbody id="write">
                     <tr>
                         <th>
                             1

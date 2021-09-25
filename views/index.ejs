@@ -51,6 +51,7 @@
                 data: {},
                 success: function (response) {
                     let write = response["write"]
+                    console.log(write)
                     for (let i = 0; i < write.length; i++) {
                         make_card(write[i])
 
@@ -62,13 +63,13 @@
         function make_card(item) {
             let htmlTemp = `<tr>
                 <th>
-                    ${item["writeId"]}
+                    ${item["name"]}
                 </th>
                 <th>
                     ${item["title"]}
                 </th>
                 <th>
-                    ${item["name"]}
+                    ${item["date"]}
                 </th>
             </tr>`
             $("#write").append(htmlTemp)
@@ -142,13 +143,13 @@
                 <thead>
                     <tr>
                         <th>
-                            번호
+                            작성자
                         </th>
                         <th>
                             제목
                         </th>
                         <th>
-                            작성자
+                            작성일자
                         </th>
                     </tr>
                 </thead>
