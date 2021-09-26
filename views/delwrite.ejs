@@ -75,13 +75,14 @@
             console.log(title,name,body,pw)
             $.ajax({
                 type: "patch",
-                url: `/api/write${writeId ? "?writeId=" + writeId : ""}`,
+                url: `/api/write/${writeId}`,
                 data: {title : title, name : name,  body : body , pw : pw},
                 success: function (response) {
                     console.log(response["result"])
+                    
                     if(response["result"] == "success"){
-                        window.location.replace("/")
                         alert("수정완료")
+                        window.location.replace("/")
                     }
                     else{
                         alert("비밀번호가 다릅니다.")
@@ -98,13 +99,13 @@
             console.log(title,name,body,pw)
             $.ajax({
                 type: "delete",
-                url: `/api/write${writeId ? "?writeId=" + writeId : ""}`,
+                url: `/api/write/${writeId}`,
                 data: {pw : pw},
                 success: function (response) {
                     console.log(response["result"])
                     if(response["result"] == "success"){
-                        window.location.replace("/")
                         alert("삭제완료")
+                        window.location.replace("/")
                     }
                     else{
                         alert("비밀번호가 다릅니다.")
