@@ -61,8 +61,6 @@ router.delete("/write/:writeId", async (req, res) => {
         }
         
     }
-
-    
 })
 
 //게시물 수정
