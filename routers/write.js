@@ -46,28 +46,41 @@ router.post('/write', async(req, res) => {
 
 
 //게시물 삭제
-router.delete("/write/:writeId/re", async (req, res) => {
+router.delete("/write/:writeId", async (req, res) => {
     const { writeId } = req.params;
+    const { pw } = req.body;
 
-    const isGoodsInCart = await Cart.find({ writeId });
+    const iswrite = await Cart.find({ writeId });
     if (isGoodsInCart.length > 0) {
-        await Cart.deleteOne({ writeId });
+        if(pw == write["pw"]){
+            await Cart.deleteOne({ writeId });
+            res.send({ result: "success" });
+        }
+        else{
+            res.send({result: "err"})
+        }
+        
     }
 
-    res.send({ result: "success" });
+    
 })
 
 //게시물 수정
-router.patch("/goods/:writeId/re", async (req, res) => {
+router.patch("/goods/:writeId", async (req, res) => {
     const { writeId } = req.params;
-    const { body } = req.body;
+    const { title, name, body, pw } = req.body;
 
     const isGoodsInCart = await Cart.find({ writeId });
     if (isGoodsInCart.length > 0) {
-        await Cart.updateOne({ writeId }, { $set: { body } });
+        if(pw == write["pw"]){
+            await Cart.updateOne({ writeId }, { $set: { title , name, body} });
+            res.send({ result: "success" });
+        }
+        else{
+            res.send({result: "err"})
+        }  
     }
 
-    res.send({ result: "success" });
 })
 
 

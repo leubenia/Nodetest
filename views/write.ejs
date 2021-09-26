@@ -35,7 +35,8 @@
         const urlParams = new URLSearchParams(queryString);
         const writeId = urlParams.get("writeId");
         $(document).ready(function () {
-            //get_write()
+            get_write()
+            console.log(writeId)
         })
 
         function sign_out() {
@@ -43,6 +44,40 @@
             $.removeCookie('userName', { path: '/' });
             window.location.href = "/"
         }
+
+        //테스트
+        function get_write() {
+            $("#body").empty()
+            console.log(writeId)
+            $.ajax({
+                type: "GET",
+                url: `/api/write${writeId ? "?writeId=" + writeId : ""}`,
+                data: {},
+                success: function (response) {
+                    let write = response["write"]
+                    console.log(write)
+                    for (let i = 0; i < write.length; i++) {
+                        make_card(write[i])
+
+                    }
+                }
+            })
+        }
+        function make_card(item) {
+            let htmlTemp = `
+            <p><h1>${item['title']}</h1></p>
+            <p>${item['name']}</p>
+            <div class="jumbotron">
+            <h1>${item['body']}</h1>
+            <p>${item['date']}</p>
+            <p><a class="btn btn-primary btn-lg" href="#" role="button">수정하기</a></p>
+            <p><a class="btn btn-primary btn-lg" href="#" role="button">삭제</a></p>
+            `
+            $("#body").append(htmlTemp)
+        }
+
+
+
 
         function get_detail() {
             $.ajax({
@@ -131,39 +166,16 @@
         </div>
 
     </nav>
-    <div class="wrap">
-        <div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            번호
-                        </th>
-                        <th>
-                            제목
-                        </th>
-                        <th>
-                            작성자
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="write">
-                    <tr>
-                        <th>
-                            1
-                        </th>
-                        <th>
-                            테스트
-                        </th>
-                        <th>
-                            멀봐씨발아
-                        </th>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div id = "body">
+        <p><h1>제목</h1></p>
+        <p>작성자</p>
+        <div class="jumbotron">
+        <h1>글내용입니다.</h1>
+        <p>날자</p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">수정하기</a></p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">삭제</a></p>
     </div>
-
+    
 
 </body>
 

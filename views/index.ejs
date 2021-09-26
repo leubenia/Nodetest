@@ -36,6 +36,10 @@
             get_write()
         })
 
+        $(document).on("click", "#write>tr", function() {
+            let a = $(this).attr('val')
+            window.location.href = "/write?writeId="+a;
+        });
         function sign_out() {
             $.removeCookie('mytoken', { path: '/' });
             $.removeCookie('userName', { path: '/' });
@@ -61,7 +65,7 @@
         }
 
         function make_card(item) {
-            let htmlTemp = `<tr>
+            let htmlTemp = `<tr val = 1>
                 <th>
                     ${item["name"]}
                 </th>
@@ -154,7 +158,7 @@
                     </tr>
                 </thead>
                 <tbody id = "write">
-                    <tr>
+                    <tr val = 1>
                         <th>
                             1
                         </th>
