@@ -51,15 +51,19 @@
             console.log(writeId)
             $.ajax({
                 type: "GET",
-                url: `/api/write${writeId ? "?writeId=" + writeId : ""}`,
+                url: `/api/write/${writeId}`,
                 data: {},
                 success: function (response) {
-                    let write = response["write"]
-                    console.log(write)
-                    for (let i = 0; i < write.length; i++) {
-                        make_card(write[i])
-
+                    let write = response["detail"]
+                    if(write == null){
+                        alert("게시글존재하지않음")
                     }
+                    else{
+                        console.log(write)
+                        make_card(write)
+                    }
+                    
+                    
                 }
             })
         }
@@ -70,8 +74,7 @@
             <div class="jumbotron">
             <h1>${item['body']}</h1>
             <p>${item['date']}</p>
-            <p><a class="btn btn-primary btn-lg" href="#" role="button">수정하기</a></p>
-            <p><a class="btn btn-primary btn-lg" href="#" role="button">삭제</a></p>
+            <p><a class="btn btn-primary btn-lg" href="/delwrite?writeId=${item['writeId']}" role="button">수정하기</a></p>
             `
             $("#body").append(htmlTemp)
         }
@@ -172,8 +175,8 @@
         <div class="jumbotron">
         <h1>글내용입니다.</h1>
         <p>날자</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">수정하기</a></p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">삭제</a></p>
+        <p><a class="btn btn-primary btn-lg" href="/delwrite?writeId=1" role="button">수정,삭제</a></p>
+        
     </div>
     
 

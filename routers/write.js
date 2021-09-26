@@ -19,9 +19,16 @@ router.get("/write", async (req, res, next) => {
 
 //게시물 한가지만 조회
 router.get("/write/:writeId", async (req, res) => {
-    const { writeId } = req.params;
-    write = await write.findOne({ writeId: writeId });
-    res.json({ detail: write });
+    const {writeId} = req.params;
+    
+    const writes = await write.findOne({writeId: writeId });
+    console.log(writes)
+    if(writes == null){
+        res.send({ result: "게시물이존재하지않습니다." });
+    }
+    else{
+        res.json({ detail: writes });
+    }
 });
 
 
@@ -46,11 +53,11 @@ router.post('/write', async(req, res) => {
 
 
 //게시물 삭제
-router.delete("/write/:writeId", async (req, res) => {
+router.delete("/write/:writeId/re", async (req, res) => {
     const { writeId } = req.params;
     const { pw } = req.body;
 
-    const iswrite = await Cart.find({ writeId });
+    const iswrite = await write.find({ writeId });
     if (isGoodsInCart.length > 0) {
         if(pw == write["pw"]){
             await Cart.deleteOne({ writeId });
@@ -64,11 +71,11 @@ router.delete("/write/:writeId", async (req, res) => {
 })
 
 //게시물 수정
-router.patch("/goods/:writeId", async (req, res) => {
+router.patch("/write/:writeId/re", async (req, res) => {
     const { writeId } = req.params;
     const { title, name, body, pw } = req.body;
 
-    const isGoodsInCart = await Cart.find({ writeId });
+    const isGoodsInCart = await write.find({ writeId });
     if (isGoodsInCart.length > 0) {
         if(pw == write["pw"]){
             await Cart.updateOne({ writeId }, { $set: { title , name, body} });
