@@ -34,7 +34,7 @@
     <link href="/static/mystyle.css" rel="stylesheet">
     <title>르베니아 게시판 | 게시판</title>
     <script>
-
+        
         $(document).ready(function () {
             get_write()
         })
@@ -98,52 +98,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-sparta justify-content-end">
-        <a class="navbar-brand" href="/">
-            <img src ="/static/mylogo.png" width="200" height="80" class="glyphicon glyphicon-home" alt="">
-            르베니아 블로그요!
-        </a>
-        <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true"
-            aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <div class="navbar-collapse collapse flex-grow-0 ml-auto" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto text-right">
-                <li class="nav-item" id="link-cart">
-                    <a class="nav-link" href="/upwrite">
-                        게시글작성<i class="fas fa-book"></i>
-                    </a>
-                </li>
-                <li class="nav-item" id="link-logout">
-                    <a class="nav-link" data-toggle="modal" data-target="#signOutModal">
-                        test<i class="fa fa-sign-out ml-2" aria-hidden="true"></i>
-                    </a>
-                    <div class="modal text-left" id="signOutModal" tabindex="-1" role="dialog"
-                        aria-labelledby="signOutModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="signOutModalLabel">로그아웃</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    로그아웃하시면 장바구니가 사라져요!
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-sparta" data-dismiss="modal">취소
-                                    </button>
-                                    <button type="button" class="btn btn-sparta" onclick="sign_out()">로그아웃하기
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-
-    </nav>
+    <%- include('header') %>
     <div class="wrap">
         <div>
             <table class="table">
@@ -177,7 +132,7 @@
         </div>
     </div>
 
-
 </body>
+
 
 </html>

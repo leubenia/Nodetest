@@ -10,10 +10,12 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-
+    
     <script src="https://kit.fontawesome.com/059578b373.js" crossorigin="anonymous"></script>
+
     <!-- Font Awesome CSS -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.js"
@@ -30,55 +32,46 @@
     
 
     <link href="/static/mystyle.css" rel="stylesheet">
-    <title>르베니아 게시판 | 작성</title>
+    <title>르베니아 게시판 | 게시판</title>
     <script>
 
-        function up_write() {
-            
-            let title = $("#title").val()
-            let name = $("#name").val()
-            let body = $("#test").val()
-            let pw = $("#pw").val()
-            console.log(title,name,body,pw)
-            if(title == ""|| name == ""|| body == ""|| pw == ""){
-                alert("빈칸이 없게 해주세요")
-            }else{
-                $.ajax({
-                    type: "POST",
-                    url: `/api/write`,
-                    data: {title : title, name : name,  body : body , pw : pw},
-                    success: function (response) {
-                        console.log(response["result"])
-                        alert("작성 완료")
-                        window.location.href = '/'
-                    }
-                })
-            }
+    </script>
+    <style>
+        .card {
+            cursor: pointer;
         }
 
-    </script>
+        html {
+            overflow: auto;
+        }
+    </style>
 </head>
 
 <body>
     <%- include('header') %>
-    <div class="page-header">
-        <h1>제목:<input type="text" id = "title" placeholder="여기에 제목입력하세요"> <small>작성자: <input type="text" id = "name" placeholder="작성자입력"></small></h1>
-    </div>
-    <div class="form">
-        <label for="colFormLabel" class="label">비밀번호</label>
-        <div style="margin-bottom:20px;" class="col-sm-10">
-            <input type="password" class="form-control" id="pw" placeholder="비밀번호에요">
-        </div>
-    </div>
-    <div class="page-header">
-        <div class="jumbotron">
-            
-            <textarea id = test placeholder="글내용"></textarea>
-            <p><a class="btn btn-primary btn-lg" href="#" role="button" onclick="up_write()">작성 완료!</a></p>
-          </div>
-    </div>
-
+    <h3>
+        회원가입
+    </h3>
+    <form action="/userdo/signup" method="POST">
+        <table>
+            <tr>
+                <td>Id : </td>
+                <td><input type="text" name="id"></td>
+            </tr>
+            <tr>
+                <td>비밀번호 : </td>
+                <td><input type="password" name="pw"></td>
+            </tr>
+            <tr>
+                <td>닉네임 : </td>
+                <td><input type="text" name="name"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="회원가입"></td>
+            </tr>
+        </table>
     
+    </form>
 
 </body>
 
