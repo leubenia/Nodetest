@@ -1,26 +1,13 @@
 const express = require("express");
-const session = require('express-session');
 const user = require("../schemas/user");
 const v1 = require("uuid")
 require('date-utils');
 
 const router = express.Router();
-router.use(session({
-    key: 'sid',
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
-    }
-}));
-// router.get('/login', function(req, res, next) {
-//     let session = req.session;
 
-//     res.render("user/login", {
-//         session : session
-//     });
-// });
+router.get('/login', function(req, res, next) {
+   
+});
 
 // 로그인 POST
 router.post("/login", async(req,res,next)=>{
