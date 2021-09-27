@@ -34,7 +34,8 @@ router.get("/write/:writeId", async (req, res) => {
 router.post('/write', async(req, res) => {
     
     const { title, name, body, pw } = req.body;
-    let writeId = v1.v1()
+    test = v1.v1().split('-')
+    let writeId = test[2] + test[1] + test[0] + test[3] + test[4]
     console.log(title, name)
     console.log("----------------------------------------------")
     let newDate = new Date();
