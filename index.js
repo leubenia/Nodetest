@@ -1,6 +1,6 @@
 const express = require('express')
-var cookieParser = require('cookie-parser');
-const expresslayouts = require('express-ejs-layouts')
+// var cookieParser = require('cookie-parser');
+// const expresslayouts = require('express-ejs-layouts')
 const session = require('express-session');
 const app = express()
 const port = 3000
