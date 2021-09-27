@@ -37,7 +37,7 @@
         const writeId = urlParams.get("writeId");
 
         $(document).ready(function () {
-            //get_write()
+            get_detail()
             console.log(writeId)
         })
         
@@ -50,17 +50,13 @@
                     if (status == 404) {
                         alert("존재하지 않는 게시글입니다.");
                     }
-                    window.location.href = "/";
+                    //window.location.href = "/";
                 },
                 success: function (response) {
                     let writeDetail = response["detail"];
-                    $("#goodsUrl").attr("src", writeDetail["thumbnailUrl"]);
-                    $("#goodsName").text(writeDetail["name"]);
-                    $("#goodsPrice").text("$" + number2decimals(goodsDetail["price"]));
-
-                    sessionStorage.setItem("writeId", writeId);
-                    sessionStorage.setItem("goodsName", goodsDetail["name"]);
-                    sessionStorage.setItem("goodsPrice", goodsDetail["price"]);
+                    $("#title").val(writeDetail["title"]);
+                    $("#name").val((writeDetail["name"]));
+                    $("#test").text((writeDetail["body"]));
                     
                 }
             });
