@@ -60,7 +60,7 @@ router.post("/signup", async(req,res,next) =>{
     console.log(body)
     await user.create({ id, pw, name})
     .then( result => {
-      
+        res.redirect("/")
     })
     .catch( err => {
       console.log(err)
