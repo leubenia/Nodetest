@@ -43,12 +43,7 @@
             let a = $(this).attr('val')
             window.location.href = "/write?writeId="+a;
         });
-        function sign_out() {
-            $.removeCookie('mytoken', { path: '/' });
-            $.removeCookie('userName', { path: '/' });
-            window.location.href = "/"
-        }
-
+        
         function get_write(category) {
             $("#write").empty()
             console.log(category)

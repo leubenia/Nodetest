@@ -13,8 +13,7 @@
                     게시글작성<i class="fas fa-book"></i>
                 </a>
             </li>
-           
-                    <% let id = sessiondo.name%>
+                    <% let id = mysess.name%>
                     <% if(id != null){ %>
                         <li class="nav-item" id="link-logout">
                         <a class="nav-link" data-toggle="modal" data-target="#signOutModal">
@@ -31,7 +30,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        로그아웃하시면 장바구니가 사라져요!
+                                        로그아웃하실래요?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-sparta" data-dismiss="modal">취소

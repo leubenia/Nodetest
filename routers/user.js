@@ -45,7 +45,7 @@ router.post("/login", async(req,res,next)=>{
         }
         else{
             console.log("비밀번호 불일치");
-            res.redirect("/");
+            res.send("<script>alert('틀렷네요?');location.href='/';</script>")
         }
     }
     
@@ -58,12 +58,14 @@ router.post("/signup", async(req,res,next) =>{
     let pw = body.pw;
     let name = body.name;
     console.log(body)
+    
     await user.create({ id, pw, name})
     .then( result => {
         res.redirect("/")
     })
     .catch( err => {
-      console.log(err)
+        console.log(err)
+        res.send("<script>alert('다시입력?');location.href='/singup';</script>")
     })
 });
 router.get("/logout", function(req,res,next){

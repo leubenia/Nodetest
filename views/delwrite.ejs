@@ -33,7 +33,7 @@
     <link href="/static/mystyle.css" rel="stylesheet">
     <title>르베니아 게시판 | 작성</title>
     <script>
-
+        
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const writeId = urlParams.get("writeId");
@@ -115,7 +115,7 @@
 </head>
 
 <body>
-    
+    <%- include('header') %>
     <div class="page-header">
         <h1>제목:<input type="text" id = "title" placeholder="여기에 제목입력하세요"> <small>작성자: <input type="text" id = "name" placeholder="작성자입력"></small></h1>
     </div>
