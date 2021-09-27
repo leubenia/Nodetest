@@ -39,14 +39,20 @@
             let body = $("#test").val()
             let pw = $("#pw").val()
             console.log(title,name,body,pw)
-            $.ajax({
-                type: "POST",
-                url: `/api/write`,
-                data: {title : title, name : name,  body : body , pw : pw},
-                success: function (response) {
-                    console.log(response["result"])
-                }
-            })
+            if(title == ""|| name == ""|| body == ""|| pw == ""){
+                alert("빈칸이 없게 해주세요")
+            }else{
+                $.ajax({
+                    type: "POST",
+                    url: `/api/write`,
+                    data: {title : title, name : name,  body : body , pw : pw},
+                    success: function (response) {
+                        console.log(response["result"])
+                        alert("작성 완료")
+                        window.location.href = '/'
+                    }
+                })
+            }
         }
 
     </script>
