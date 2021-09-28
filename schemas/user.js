@@ -21,6 +21,11 @@ const userSchema = new Schema({
     type: Boolean,
     required: true,
     unique: false
+  },
+  salt:{
+    type: String,
+    required: true,
+    unique: false
   }
 });
 

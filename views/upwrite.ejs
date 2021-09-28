@@ -62,7 +62,8 @@
 <body>
     <%- include('header') %>
     <div class="page-header">
-        <h1>제목:<input type="text" id = "title" placeholder="여기에 제목입력하세요"> <small>작성자: <input type="text" id = "name" placeholder="작성자입력" value="<%= id %>"></small></h1>
+        <h1>제목:<input type="text" id = "title" placeholder="여기에 제목입력하세요"> 
+            <small>작성자: <input type="text" id = "name" placeholder="작성자입력" value="<% if(mysess){ %><%= id %><% } %>"></small></h1>
     </div>
     <div class="form">
         <label for="colFormLabel" class="label">비밀번호</label>

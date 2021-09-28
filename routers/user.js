@@ -4,6 +4,7 @@ let jwt = require("jsonwebtoken");
 let secretObj = require("../private/myconkey");
 var cookie = require('cookie-parser');
 const v1 = require("uuid");
+const crypto = require('crypto');
 require('date-utils');
 
 const router = express.Router();
@@ -34,9 +35,9 @@ router.post("/login", async (req, res, next) => {
         if (users != null) {
             let dbPassword = users["pw"]
             let inputPassword = body.pw;
-            //let salt = result.dataValues.salt;
-            //let hashPassword = crypto.createHash("sha512").update(inputPassword + salt).digest("hex");
-            if (dbPassword === inputPassword) {
+            let salt = users["salt"];
+            let hashPassword = crypto.createHash("sha512").update(inputPassword + salt).digest("hex");
+            if (dbPassword === hashPassword) {
                 console.log("비밀번호 일치");
                 res.cookie("user",token,{maxAge: 300000})
                 res.redirect("/");
@@ -52,11 +53,13 @@ router.post("/login", async (req, res, next) => {
 router.post("/signup", async (req, res, next) => {
     const body = req.body;
     const id = body.id;
-    const pw = body.pw;
+    const pwtest = body.pw;
     const name = body.name;
-    console.log(body)
-    const iswhat = false;
-    await user.create({ id, pw, name ,iswhat})
+    let salt = Math.round((new Date().valueOf() * Math.random())) + "";
+    let pw = crypto.createHash("sha512").update(pwtest + salt).digest("hex");
+    const iswhat = true;
+    console.log(id, pw, name ,iswhat, salt)
+    await user.create({ id, pw, name ,iswhat, salt})
         .then(result => {
             res.redirect("/")
         })
