@@ -34,7 +34,74 @@
     <link href="/static/mystyle.css" rel="stylesheet">
     <title>르베니아 게시판 | 게시판</title>
     <script>
-
+        function checkid(id){
+            let bool = 0;
+            if(id == ""){
+                return 0;
+            }
+            $.ajax({
+                type: "get",
+                url: `/userdo/userid/${id}`,
+                async: false,
+                data: {},
+                success: function (response) {
+                    let check = response["result"]
+                    console.log(check)
+                    if(check == "do"){
+                        bool = 1;
+                    }
+                    else{
+                        bool = 0;
+                    }
+                }
+            })
+            return bool;
+        }
+        
+        function up_sing() {
+            let id = $("#id").val()
+            let name = $("#name").val()
+            let pw = $("#pw").val()
+            let pw2 = $("#pw2").val()
+            console.log(id,name,pw2,pw)
+            console.log(checkid(id))
+            if(id == null||id == ""){
+                $("#id").focus();
+                alert("아이디를 입력해주세요");
+            }
+            else if(name == null||name == ""){
+                $("#name").focus();
+                alert("닉네임을 입력해주세요");
+            }
+            else if(pw == null||pw == ""){
+                $("#pw").focus();
+                alert("비밀번호를 입력해주세요");
+            }
+            else if(pw2 == null||pw2 == ""){
+                $("#pw2").focus();
+                alert("비밀번호를 입력해주세요");
+            }
+            else if(checkid(id)==0){
+                $("#id").focus();
+                alert("아이디가 중복이 됩니다.")
+            }
+            else if(pw != pw2){
+                $("#pw").focus();
+                alert("비밀번호가 같지않아요");
+            }
+            else{
+                $.ajax({
+                    type: "POST",
+                    url: `/userdo/signup`,
+                    data: {id : id, name : name, pw : pw},
+                    success: function (response) {
+                        console.log(response["result"])
+                        alert("작성 완료")
+                        window.location.href = '/'
+                    }
+                })
+            }
+        }
     </script>
     <style>
         .card {
@@ -52,26 +119,29 @@
     <h3>
         회원가입
     </h3>
-    <form action="/userdo/signup" method="POST">
+    <div>
         <table>
             <tr>
                 <td>Id : </td>
-                <td><input type="text" name="id"></td>
+                <td><input type="text" id="id"></td>
             </tr>
             <tr>
                 <td>비밀번호 : </td>
-                <td><input type="password" name="pw"></td>
+                <td><input type="password" id="pw"></td>
+            </tr>
+            <tr>
+                <td>비밀번호 확인 : </td>
+                <td><input type="password" id="pw2"></td>
             </tr>
             <tr>
                 <td>닉네임 : </td>
-                <td><input type="text" name="name"></td>
+                <td><input type="text" id="name"></td>
             </tr>
             <tr>
-                <td><input type="submit" value="회원가입"></td>
+                <td><button onclick="up_sing()" value="회원가입">회원가입을 눌러요</button></td>
             </tr>
         </table>
-    
-    </form>
+    </div>
 
 </body>
 

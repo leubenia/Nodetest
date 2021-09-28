@@ -24,6 +24,17 @@ router.get("/someAPI", function(req, res, next){
     }
 })
 
+//아이디 찾기
+router.get("/userid/:id", async(req, res, next)=> {
+    const {id} = req.params;
+    const writes = await user.findOne({id: id });
+    if(writes == null){
+        res.send({ result: "do" });
+    }
+    else{
+        res.send({ result: "err" });
+    }
+});
 
 // 로그인 POST
 router.post("/login", async (req, res, next) => {
@@ -31,8 +42,8 @@ router.post("/login", async (req, res, next) => {
     user.findOne({ id: body.id })
     .then(users =>{
         console.log(users)
-        let token = jwt.sign({ id: users["id"] , name: users["name"] }, secretObj.secret ,{expiresIn: '5m' })
         if (users != null) {
+            let token = jwt.sign({ id: users["id"] , name: users["name"] }, secretObj.secret ,{expiresIn: '5m' })
             let dbPassword = users["pw"]
             let inputPassword = body.pw;
             let salt = users["salt"];
@@ -46,6 +57,10 @@ router.post("/login", async (req, res, next) => {
                 console.log("비밀번호 불일치");
                 res.send("<script>alert('틀렷네요?');location.href='/';</script>")
             }
+        }
+        else{
+            console.log("아이디 없음");
+            res.send("<script>alert('아저씨아이디가아니요');location.href='/';</script>")
         }
     })
 });

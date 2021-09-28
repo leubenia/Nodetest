@@ -37,8 +37,7 @@ app.use(cookieParser())
 app.use((req, res, next) => {
   if(req.cookies.user != null){
     let decoded = jwt.verify(req.cookies.user, secretObj.secret);
-    res.locals.mysess = decoded["id"];
-    console.log(decoded)
+    res.locals.mysess = decoded["name"];
   }
   else{
     res.locals.mysess = ""
