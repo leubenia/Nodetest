@@ -55,7 +55,7 @@ router.post("/signup", async (req, res, next) => {
     const pw = body.pw;
     const name = body.name;
     console.log(body)
-    const iswhat = true;
+    const iswhat = false;
     await user.create({ id, pw, name ,iswhat})
         .then(result => {
             res.redirect("/")
