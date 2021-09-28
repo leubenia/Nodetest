@@ -57,7 +57,7 @@ router.post("/signup", async (req, res, next) => {
     const name = body.name;
     let salt = Math.round((new Date().valueOf() * Math.random())) + "";
     let pw = crypto.createHash("sha512").update(pwtest + salt).digest("hex");
-    const iswhat = true;
+    const iswhat = false;
     console.log(id, pw, name ,iswhat, salt)
     await user.create({ id, pw, name ,iswhat, salt})
         .then(result => {
