@@ -1,6 +1,8 @@
 const express = require('express')
-// var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
+let secretObj = require("./private/myconkey");
 // const expresslayouts = require('express-ejs-layouts')
+let jwt = require("jsonwebtoken");
 const session = require('express-session');
 const app = express()
 const port = 3000
@@ -16,6 +18,8 @@ app.use(express.static('public'));
 const writeRouter = require("./routers/write");
 app.use("/api", [writeRouter]);
 
+
+//이건 세션
 app.use(session({
   key: 'sid',
   secret: 'secret',
@@ -26,23 +30,21 @@ app.use(session({
   }
 }));
 const userRouter = require("./routers/user");
+
 app.use("/userdo", [userRouter]);
+
+app.use(cookieParser())
 app.use((req, res, next) => {
-  res.locals.mysess = req.session;
+  if(req.cookies.user != null){
+    let decoded = jwt.verify(req.cookies.user, secretObj.secret);
+    res.locals.mysess = decoded["id"];
+    console.log(decoded)
+  }
+  else{
+    res.locals.mysess = ""
+  }
   next();
 });
-// router.get('/login', function(req, res, next) {
-//     let session = req.session;
-
-//     res.render("user/login", {
-//         session : session
-//     });
-// });
-
-// app.use(expresslayouts);
-
-// app.set('index','index');
-// app.set("layout extractScripts", true);
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -50,15 +52,13 @@ app.set('view engine', 'ejs');
 
 //첫페이지 게시물 확인
 app.get('/', (req, res, next) => {
-  let sessiondo = req.session;
-  res.render('index',{test : sessiondo})
+  
+  res.render('index')
 });
 
 //test해더
 app.get('/header',(req, res)=>{
-  let sessiondo = req.session;
-  console.log(sessiondo)
-  res.render('header',{test : sessiondo})
+  res.render('header')
 })
 
 //게시물 한가지
@@ -69,12 +69,7 @@ app.get('/write',(req, res)=>{
 
 //게시물 올리기
 app.get('/upwrite',(req, res)=>{
-    if(req.session.name == null){
-      res.send("<script>alert('권한이 없네요 오홓홓');location.href='/';</script>")
-    }
-    else{
-      res.render('upwrite')
-    }
+    res.render('upwrite')
 })
 
 //게시물 삭제,수정
@@ -85,8 +80,7 @@ app.get('/delwrite',(req, res)=>{
 
 //회원가입
 app.get('/singup',(req, res)=>{
-  let sessiondo = req.session;
-  res.render('singup',{test : sessiondo})
+  res.render('singup')
 })
 
 

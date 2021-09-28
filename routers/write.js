@@ -4,6 +4,9 @@ const v1 = require("uuid")
 require('date-utils');
 
 const router = express.Router();
+router.use((req, res, next) => {
+    next();
+});
 
 //게시물 조회
 router.get("/write", async (req, res, next) => {

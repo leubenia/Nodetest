@@ -16,6 +16,11 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: false
+  },
+  iswhat:{
+    type: Boolean,
+    required: true,
+    unique: false
   }
 });
 

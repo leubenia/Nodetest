@@ -1,3 +1,10 @@
+<script>
+    function sign_out() {
+        $.removeCookie('user', {path: '/'});
+        window.location.href = "/"
+    }
+</script>
+
 <nav class="navbar navbar-expand-sm navbar-dark bg-sparta justify-content-end">
     <a class="navbar-brand" href="/">
         <img src ="/static/mylogo.png" width="200" height="80" class="glyphicon glyphicon-home" alt="">
@@ -13,8 +20,9 @@
                     게시글작성<i class="fas fa-book"></i>
                 </a>
             </li>
-                    <% let id = mysess.name%>
-                    <% if(id != null){ %>
+                    
+                    <% if(mysess){ %>
+                        <% id = mysess %>
                         <li class="nav-item" id="link-logout">
                         <a class="nav-link" data-toggle="modal" data-target="#signOutModal">
                             <%=id%>님 로그아웃<i class="fa fa-sign-out ml-2" aria-hidden="true"></i>
@@ -35,7 +43,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-sparta" data-dismiss="modal">취소
                                         </button>
-                                        <a href="/userdo/logout"><button type="button" class="btn btn-sparta" >로그아웃하기</a>
+                                        <button type="button" class="btn btn-sparta" onclick="sign_out()">로그아웃하기
                                         </button>
                                     </div>
                                 </div>
