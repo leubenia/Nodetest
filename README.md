@@ -1,10 +1,18 @@
 # Nodetest
 노드첫테스트페이지
 
-밑에 해야되!
-node 설치
-npm install express
-npm install mongooes
-npm install ejs
-npm install date-utils
-npm install --save express-session
+## 관리자 계정이 아니면
+확인 못하는 기능이 있어요 ㅎㅎ 
+한번 찾아보는것도 재밌겟지...
+관리자계정은 현재 만들 수 없어요..!
+
+
+## 세션과, 쿠키
+두가지 방법으로 로그인을 구현했으나. 
+현재는 쿠키만으로 로그인을 하게했음...
+
+## 현상황
+게시판(글쓰기, 글보기, 수정, 삭제)
+로그인(로그인, 회원가입, 로그아웃){쿠키,세션} 현재는 쿠키만 사용
+까지 구현완료
+글에 대한 댓글 구현중.....
