@@ -1,9 +1,13 @@
 const express = require("express");
 const write = require("../schemas/write");
+const checkloginware = require("../middlewares/usermid")
 const v1 = require("uuid")
+var cookie = require('cookie-parser');
+
 require('date-utils');
 
 const router = express.Router();
+router.use(cookie())
 router.use((req, res, next) => {
     next();
 });
@@ -33,14 +37,11 @@ router.get("/write/:writeId", async (req, res) => {
 });
 
 
-//게시물 작성 미완성
+//게시물 작성
 router.post('/write', async(req, res) => {
-    
     const { title, name, body, pw } = req.body;
     test = v1.v1().split('-')
     let writeId = test[2] + test[1] + test[0] + test[3] + test[4]
-    console.log(title, name)
-    console.log("----------------------------------------------")
     let newDate = new Date();
     let date = newDate.toFormat('YYYY,MM,DD HH24:MI:SS')
     try{
@@ -86,11 +87,49 @@ router.patch("/write/:writeId", async (req, res) => {
             res.send({result: "err"})
         }  
     }
-
 })
-router.post("/rewrite/:writeId", async(req,res)=>{
-    const {writeId} = req.params;
-    const {  rebody, pw, username } = req.body;
+//댓글 작성
+router.post("/rewrite/:writeId", checkloginware ,async(req,res)=>{
+    const { writeId } = req.params;
+    const { rebody,username } = req.body;
+    write.findOne({writeId})
+    .then(writes =>{
+        if(writes != null){
+            let rewrites = writes["rewrite"];
+            doc = {rebody: rebody, pw: "123123", username: username}
+            rewrites.push(doc)
+            console.log(rewrites)
+            writes.rewrite = rewrites;
+            writes.save();
+            res.send({ result: "success" });
+        }
+        else{
+            res.send({result:"err"})
+        }
+    })
+})
+//댓글 수정
+router.patch("/rewrite/:writeId", async(req,res)=>{
+    const { writeId } = req.params;
+    const { rebody, username } = req.body;
+    write.findone({writeId})
+    .then(writes =>{
+        if(writes != null){
+            let rewrites = writes["rewrite"];
+            doc = {rebody: rebody, pw: pw, username: username}
+            rewrites.append(doc)
+            write.updateOne({ writeId }, { $set: {rewrite: rewrites } });
+            res.send({ result: "success" });
+        }
+        else{
+            res.send({result:"err"})
+        }
+    })
+})
+//중첩스키마 공부중...
+router.delete("/rewrite/:writeId", async(req,res)=>{
+    const { writeId } = req.params;
+    const { reid } = req.body;
     write.findone({writeId})
     .then(writes =>{
         if(writes != null){

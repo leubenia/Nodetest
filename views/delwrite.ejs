@@ -32,6 +32,7 @@
 
     <link href="/static/mystyle.css" rel="stylesheet">
     <title>르베니아 게시판 | 작성</title>
+    <script type="text/javascript" src="../public/static/mysrc.js"></script>
     <script>
         
         const queryString = window.location.search;
@@ -40,6 +41,7 @@
 
         $(document).ready(function () {
             get_detail()
+            callSelf();
             console.log(writeId)
         })
         

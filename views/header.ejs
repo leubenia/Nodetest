@@ -1,106 +1,186 @@
 <script>
-    function sign_out() {
-        $.removeCookie('user', {path: '/'});
-        window.location.href = "/"
+  function sign_out() {
+    $.removeCookie("user", { path: "/" });
+    window.location.href = "/";
+  }
+  function logindo() {
+    let id = $("#idlog").val();
+    let pw = $("#pwlog").val();
+    console.log(id,pw);
+    if (id == null || id == "") {
+      $("#idlog").focus();
+      alert("아이디를 입력해주세요");
+    } else if (pw == null || pw == "") {
+      $("#pwlog").focus();
+      alert("비밀번호를 입력해주세요");
+    } else {
+      $.ajax({
+        type: "POST",
+        url: `/userdo/login`,
+        data: { id: id, pw: pw},
+        success: function (response) {
+          alert("로그인완료");
+          window.location.replace("/");
+        },
+        error: function (error) {
+          console.log(error);
+          alert(error.responseJSON.errorMessage);
+        },
+      });
     }
+  }
 </script>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-sparta justify-content-end">
-    <a class="navbar-brand" href="/">
-        <img src ="/static/mylogo.png" width="200" height="80" class="glyphicon glyphicon-home" alt="">
-        르베니아 블로그요!
-    </a>
-    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
-        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true"
-        aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-    <div class="navbar-collapse collapse flex-grow-0 ml-auto" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto text-right">
-            <li class="nav-item" id="link-cart">
-                <a class="nav-link" href="/upwrite">
-                    게시글작성<i class="fas fa-book"></i>
-                </a>
-            </li>
-                    
-                    <% if(mysess){ %>
-                        <% id = mysess %>
-                        <li class="nav-item" id="link-logout">
-                        <a class="nav-link" data-toggle="modal" data-target="#signOutModal">
-                            <%=id%>님 로그아웃<i class="fa fa-sign-out ml-2" aria-hidden="true"></i>
-                        </a>
-                        <div class="modal text-left" id="signOutModal" tabindex="-1" role="dialog"
-                            aria-labelledby="signOutModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="signOutModalLabel">로그아웃</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        로그아웃하실래요?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-sparta" data-dismiss="modal">취소
-                                        </button>
-                                        <button type="button" class="btn btn-sparta" onclick="sign_out()">로그아웃하기
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </li>
-                    <% } else{ %>
-                        <li class="nav-item" id="link-logout">
-                        <a class="nav-link" data-toggle="modal" data-target="#signOutModal">
-                            로그인하기<i class="fa fa-sign-out ml-2" aria-hidden="true"></i>
-                        </a>
-                        <div class="modal text-left" id="signOutModal" tabindex="-1" role="dialog"
-                            aria-labelledby="signOutModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="signOutModalLabel">로그인</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <form action="/userdo/login" method="post">
-                                        <div class="modal-body">
-                                            
-                                                <table>
-                                                    <tr>
-                                                        <td>id : </td>
-                                                        <td><input type="text" name="id"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>비번 : </td>
-                                                        <td><input type="password" name="pw"></td>
-                                                    </tr>
-                                                   
-                                                </table>
-                                            
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-sparta" data-dismiss="modal">취소
-                                            </button>
-                                            <input type="submit" value="로그인">
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        </li>
-                    
-                        <li class="nav-item" id="link-cart">
-                            <a class="nav-link" href="/singup">
-                                회원가입?<i class="fas fa-book"></i>
-                            </a>
-                        </li>
-                    <% } %> 
-            
-           
-        </ul>
-    </div>
+  <a class="navbar-brand" href="/">
+    <img
+      src="/static/mylogo.png"
+      width="200"
+      height="80"
+      class="glyphicon glyphicon-home"
+      alt=""
+    />
+    르베니아 블로그요!
+  </a>
+  <button
+    class="navbar-toggler ml-auto"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="true"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div
+    class="navbar-collapse collapse flex-grow-0 ml-auto"
+    id="navbarSupportedContent"
+  >
+    <ul class="navbar-nav mr-auto text-right">
+      <li class="nav-item" id="link-cart">
+        <a class="nav-link" href="/upwrite">
+          게시글작성<i class="fas fa-book"></i>
+        </a>
+      </li>
 
+      <% if(mysess){ %> <% id = mysess %>
+      <li class="nav-item" id="link-logout">
+        <a class="nav-link" data-toggle="modal" data-target="#signOutModal">
+          <%=id%>님 로그아웃<i
+            class="fa fa-sign-out ml-2"
+            aria-hidden="true"
+          ></i>
+        </a>
+        <div
+          class="modal text-left"
+          id="signOutModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="signOutModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="signOutModalLabel">로그아웃</h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">로그아웃하실래요?</div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-outline-sparta"
+                  data-dismiss="modal"
+                >
+                  취소
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sparta"
+                  onclick="sign_out()"
+                >
+                  로그아웃하기
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <% } else{ %>
+      <li class="nav-item" id="link-logout">
+        <a class="nav-link" data-toggle="modal" data-target="#signOutModal">
+          로그인하기<i class="fa fa-sign-out ml-2" aria-hidden="true"></i>
+        </a>
+        <div
+          class="modal text-left"
+          id="signOutModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="signOutModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="signOutModalLabel">로그인</h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              
+                <div class="modal-body">
+                  <table>
+                    <tr>
+                      <td>id :</td>
+                      <td><input type="text" id="idlog" /></td>
+                    </tr>
+                    <tr>
+                      <td>비번 :</td>
+                      <td><input type="password" id="pwlog" /></td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-outline-sparta"
+                    data-dismiss="modal"
+                  >
+                    취소
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-sparta"
+                    onclick="logindo()"
+                  >
+                    로그인
+                  </button>
+                </div>
+              
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item" id="link-cart">
+        <a class="nav-link" href="/singup">
+          회원가입?<i class="fas fa-book"></i>
+        </a>
+      </li>
+      <% } %>
+    </ul>
+  </div>
 </nav>

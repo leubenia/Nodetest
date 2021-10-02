@@ -1,5 +1,6 @@
 const express = require("express");
 const user = require("../schemas/user");
+const checkloginware = require("../middlewares/usermid")
 let jwt = require("jsonwebtoken");
 let secretObj = require("../private/myconkey");
 var cookie = require('cookie-parser');
@@ -11,55 +12,6 @@ const router = express.Router();
 
 router.use(cookie())
 
-
-function usercheck(id, pw, name){
-    const users = user.findOne({id: id});
-    let salt = users["salt"];
-    let hashPassword = crypto.createHash("sha512").update(pw + salt).digest("hex");
-    return {
-        userdo:() =>{
-            if(users === null){
-                return false;
-            }
-            else{
-                return true;
-            }
-        },
-        
-        idcheck: ()=>{
-            if(users["id"] === id){
-                return true;
-            }
-            else{
-                return false;
-            }
-        },
-        pwcheck: ()=>{
-            if(users["pw"] === hashPassword ){
-                return true;
-            }
-            else{
-                return false;
-            }
-        },
-        hashpw: ()=>{
-            return hashPassword;
-        },
-        namecheck:()=>{
-            user.findOne({name: name}).then(
-                isuser =>{
-                    if(isuser === null){
-                        return true;
-                    }
-                    else{
-                        return false;
-                    }
-                }
-            )
-        }
-
-    }
-}
 
 //아이디 찾기
 router.get("/userid/:id", async(req, res, next)=> {
@@ -88,59 +40,32 @@ router.post("/login", async (req, res, next) => {
             if (dbPassword === hashPassword) {
                 console.log("비밀번호 일치");
                 res.cookie("user",token,{maxAge: 300000})
-                res.redirect("/");
+                res.status(200).send({});
             }
             else {
                 console.log("비밀번호 불일치");
-                res.send("<script>alert('틀렷네요?');location.href='/';</script>")
+                res.status(400).send({
+                    errorMessage: "아이디 또는 비밀번호가 틀러요 아저씨!",})
             }
         }
         else{
             console.log("아이디 없음");
-            res.send("<script>alert('아저씨아이디가아니요');location.href='/';</script>")
+            res.status(400).send({
+                errorMessage: "아이디 또는 비밀번호가 틀러요 아저씨!",})
         }
     })
 });
-//회원가입
-router.post("/signup", async (req, res, next) => {
-    const body = req.body;
-    const id = body.id;
-    const pwtest = body.pw;
-    const name = body.name;
-    const {userdo, hashpw ,namecheck} = usercheck(id, pwtest, name)
-    if(!/^[0-9a-z+]{3,}/gi.test(name)){
-        res.send({error : "닉네임을 확인하세요"})
-    }
-    if(!/^[0-9]{4,}[^${name}]/gi.test(pwtest)){
-        res.send("비밀번호가 4자 이하거나 닉네임과 같은 값이 있습니다.")
-    }
-    if(!namecheck()){
-        res.send("닉네임 중복.")
-    }
-    let salt = Math.round((new Date().valueOf() * Math.random())) + "";
-    let pw = crypto.createHash("sha512").update(pwtest + salt).digest("hex");
-    const iswhat = false;
-    console.log(id, pw, name ,iswhat, salt)
-    await user.create({ id, pw, name ,iswhat, salt})
-        .then(result => {
-            res.redirect("/")
-        })
-        .catch(err => {
-            console.log(err)
-            res.send("<script>alert('다시입력?');location.href='/singup';</script>")
-        })
-});
 
-//회원가입 다시짜기
+//회원가입 
 const userupjoi = joi.object({
     id: joi.string().required(),
     pw: joi.string().required(),
     conpw: joi.string().required(),
     name: joi.string().required(),
   });
-router.post("/users", async (req, res) => {
+router.post("/upusers", async (req, res) => {
     const { error, value } = userupjoi.validate(req.body);
-    const { nickname, email, password, confirmPassword } = value;
+    const { id, pw, conpw, name } = value;
   
     if (error) {
       res.status(400).send({
@@ -148,32 +73,50 @@ router.post("/users", async (req, res) => {
       });
       return;
     }
-    if (password !== confirmPassword) {
+    console.log(name);
+    if(!/^[0-9a-z+]{3,}/gi.test(name)){
+        res.status(400).send({ errorMessage : "닉네임을 확인하세요"})
+        return;
+    }
+    if(!/^[]{4,}[^${name}]/gi.test(pw)){
+        res.status(400).send({ errorMessage :"비밀번호가 4자 이하거나 닉네임과 같은 값이 있습니다."})
+        return;
+    }
+    if (pw !== conpw) {
       res.status(400).send({
         errorMessage: "페스워드가 페스워드 확인란과 동일하지 않습니다.",
       });
       return;
     }
-  
-    const exisUsers = await User.findAll({
-      where: {
-        [Op.or]: [{ nickname }, { email }],
-      },
-    });
+    const exisUsers = await user.find({id});
     if (exisUsers.length) {
       res.status(400).send({
-        errorMessage: "이미 가입된 아이디 또는 닉네임.",
+        errorMessage: "이미 가입된 아이디.",
       });
       return;
     }
-  
-    await User.create({ email, nickname, password });
+    const exisUsersname = await user.find({name});
+    if (exisUsersname.length) {
+        res.status(400).send({
+          errorMessage: "이미 가입된 닉네임.",
+        });
+        return;
+      }
+    
+    let salt = Math.round((new Date().valueOf() * Math.random())) + "";
+    const ispw = crypto.createHash("sha512").update(pw + salt).digest("hex");
+    const iswhat = false;
+    console.log(id, ispw, name ,iswhat, salt)
+    await user.create({ id, pw : ispw, name ,iswhat, salt});
   
     res.status(200).send({});
   });
 
 
-
+//유저 체크
+router.get("/checkid",checkloginware ,async(req, res)=>{
+    res.status(200).send({doit : "로그인이 되어 있습니다."})
+})
 
 
 

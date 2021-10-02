@@ -12,6 +12,7 @@ const rewriteSchema = new Schema({
     type: String
   }
 })
+
 const writeSchema = new Schema({
   writeId: {
     type: String,

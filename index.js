@@ -1,12 +1,11 @@
 const express = require('express')
 const cookieParser = require('cookie-parser');
-let secretObj = require("./private/myconkey");
-// const expresslayouts = require('express-ejs-layouts')
-let jwt = require("jsonwebtoken");
+const secretObj = require("./private/myconkey");
+const jwt = require("jsonwebtoken");
 const session = require('express-session');
 const app = express()
 const port = 3000
-
+app.use("/public", express.static('public'))
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 

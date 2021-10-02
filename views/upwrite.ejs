@@ -31,10 +31,12 @@
 
     <link href="/static/mystyle.css" rel="stylesheet">
     <title>르베니아 게시판 | 작성</title>
+    <script type="text/javascript" src="../public/static/mysrc.js"></script>
     <script>
-
+        $(document).ready(function () {
+            callSelf(); 
+        })
         function up_write() {
-            
             let title = $("#title").val()
             let name = $("#name").val()
             let body = $("#test").val()
