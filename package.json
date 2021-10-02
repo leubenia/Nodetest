@@ -17,6 +17,7 @@
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.2",
     "install": "^0.13.0",
+    "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.7",
     "node-ninja": "^1.0.2",

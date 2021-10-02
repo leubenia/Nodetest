@@ -97,7 +97,7 @@ router.post("/rewrite/:writeId", async(req,res)=>{
             let rewrites = writes["rewrite"];
             doc = {rebody: rebody, pw: pw, username: username}
             rewrites.append(doc)
-            await write.updateOne({ writeId }, { $set: {rewrite: rewrites } });
+            write.updateOne({ writeId }, { $set: {rewrite: rewrites } });
             res.send({ result: "success" });
         }
         else{

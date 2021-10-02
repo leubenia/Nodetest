@@ -34,37 +34,12 @@
     <link href="/static/mystyle.css" rel="stylesheet">
     <title>르베니아 게시판 | 게시판</title>
     <script>
-        function checkid(id){
-            let bool = 0;
-            if(id == ""){
-                return 0;
-            }
-            $.ajax({
-                type: "get",
-                url: `/userdo/userid/${id}`,
-                async: false,
-                data: {},
-                success: function (response) {
-                    let check = response["result"]
-                    console.log(check)
-                    if(check == "do"){
-                        bool = 1;
-                    }
-                    else{
-                        bool = 0;
-                    }
-                }
-            })
-            return bool;
-        }
-        
         function up_sing() {
             let id = $("#id").val()
             let name = $("#name").val()
             let pw = $("#pw").val()
             let pw2 = $("#pw2").val()
             console.log(id,name,pw2,pw)
-            console.log(checkid(id))
             if(id == null||id == ""){
                 $("#id").focus();
                 alert("아이디를 입력해주세요");
@@ -81,19 +56,11 @@
                 $("#pw2").focus();
                 alert("비밀번호를 입력해주세요");
             }
-            else if(checkid(id)==0){
-                $("#id").focus();
-                alert("아이디가 중복이 됩니다.")
-            }
-            else if(pw != pw2){
-                $("#pw").focus();
-                alert("비밀번호가 같지않아요");
-            }
             else{
                 $.ajax({
                     type: "POST",
                     url: `/userdo/signup`,
-                    data: {id : id, name : name, pw : pw},
+                    data: {id : id, name : name, pw : pw, conpw : pw2},
                     success: function (response) {
                         console.log(response["result"])
                         alert("작성 완료")
