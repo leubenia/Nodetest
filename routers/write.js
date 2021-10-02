@@ -33,7 +33,7 @@ router.get("/write/:writeId", async (req, res) => {
 });
 
 
-//게시물 작성
+//게시물 작성 미완성
 router.post('/write', async(req, res) => {
     
     const { title, name, body, pw } = req.body;
@@ -87,6 +87,23 @@ router.patch("/write/:writeId", async (req, res) => {
         }  
     }
 
+})
+router.post("/rewrite/:writeId", async(req,res)=>{
+    const {writeId} = req.params;
+    const {  rebody, pw, username } = req.body;
+    write.findone({writeId})
+    .then(writes =>{
+        if(writes != null){
+            let rewrites = writes["rewrite"];
+            doc = {rebody: rebody, pw: pw, username: username}
+            rewrites.append(doc)
+            await write.updateOne({ writeId }, { $set: {rewrite: rewrites } });
+            res.send({ result: "success" });
+        }
+        else{
+            res.send({result:"err"})
+        }
+    })
 })
 
 

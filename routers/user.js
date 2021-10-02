@@ -70,6 +70,15 @@ router.post("/signup", async (req, res, next) => {
     const id = body.id;
     const pwtest = body.pw;
     const name = body.name;
+    if(!/^[0-9a-z+]{3,}/gi.test(name)){
+        res.send({error : "닉네임을 확인하세요"})
+    }
+    if(!/^[0-9]{4,}[^${name}]/gi.test(pwtest)){
+        res.send("비밀번호가 4자 이하거나 닉네임과 같은 값이 있습니다.")
+    }
+    if(user.findOne({ id: body.id })){
+        res.send({error : "중복닉네임을 확인하세요"})
+    }
     let salt = Math.round((new Date().valueOf() * Math.random())) + "";
     let pw = crypto.createHash("sha512").update(pwtest + salt).digest("hex");
     const iswhat = false;
