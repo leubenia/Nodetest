@@ -35,6 +35,7 @@
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const writeId = urlParams.get("writeId");
+        let frewrite = "";
         $(document).ready(function () {
             get_write()
             console.log(writeId)
@@ -61,11 +62,12 @@
                         alert("게시글존재하지않음")
                     }
                     else{
-                        console.log(write)
+                        
                         make_card(write)
                         
                         for(rewr of write["rewrite"]){
                             make_re(rewr)
+                            
                         }
                         
                     }
@@ -85,15 +87,16 @@
             $("#body").append(htmlTemp)
         }
         function make_re(item){
-            let htmlTemp =`<tr val = 1>
+            let htmlTemp =`<tr val = "${item["_id"]}">
                 <th>
                     ${item["username"]}
                 </th>
-                <th>
-                    ${item["rebody"]}
+                <th id = "test">
+                    <input type="text" id = "name" placeholder="작성자입력" value="${item["rebody"]}" readonly>
                 </th>
                 <th>
-                    <button> 수정</button><button> 삭제</button>
+                    <button onclick="pat_rewrite(this)"> 수정</button><button onclick="del_rewrite(this)"> 삭제</button>
+                    <button class = "hide" onclick="dopat_rewrite(this)"> 완료</button><button class = "hide" onclick="fall_rewrite(this)"> 취소</button>
                 </th>
             </tr>`
             $("#write").append(htmlTemp);
@@ -119,9 +122,75 @@
                 },
             })
         }
+        //댓글 수정
+        function pat_rewrite(test) {
+            //console.log($(test).parents("tr").attr('val'))
+            const reid = $(test).parents("tr").attr('val')
+            let a = $(test).parents("tr");
+            //console.log($(a).children("#test").text().trim())
+            //$(a).children("#test").children("#name").attr('readonly', 'readonly');
+            $(a).children("#test").children("#name").removeAttr('readonly');
+            //console.log($(a).children("#test").children("#name").val())
+            const rebody = $(a).children("#test").children("#name").val();
+            frewrite = $(a).children("#test").children("#name").val();
+            //console.log($(test).parent().children("button"))
+            $(test).parent().children("button").toggleClass("hide");
+            
+        }
+        //수정 완료!
+        function dopat_rewrite(test) {
+            const reid = $(test).parents("tr").attr('val')
+            let a = $(test).parents("tr");
+            const rebody = $(a).children("#test").children("#name").val();
+            frewrite = $(a).children("#test").children("#name").val();
+            $.ajax({
+                type: "PATCH",
+                url: `/api/rewrite/${writeId}`,
+                data: {rebody:rebody,reid: reid},
+                success: function (response) {
+                    alert(response["result"])
+                    window.location.reload();
+                },
+                error: function (error) {
+                    alert(error.responseJSON.errorMessage);
+                },
+            })
+            
+        }
+        //수정 취소
+        function fall_rewrite(test) {
+            console.log($(test).parents("tr").attr('val'))
+            let a = $(test).parents("tr");
+            //console.log($(a).children("#test").text().trim())
+            $(a).children("#test").children("#name").attr('readonly', 'readonly');
+            //$(a).children("#test").children("#name").removeAttr('readonly');
+            console.log($(a).children("#test").children("#name").val())
+            console.log($(test).parent().children("button"))
+            $(test).parent().children("button").toggleClass("hide");
+            $(a).children("#test").children("#name").val(frewrite) 
+            
+        }
+        //댓글삭제
+        function del_rewrite(test) {
+            const reid = $(test).parents("tr").attr('val')
+            $.ajax({
+                type: "DELETE",
+                url: `/api/rewrite/${writeId}`,
+                data: {reid: reid},
+                success: function (response) {
+                    alert(response["result"])
+                    window.location.reload();
+                },
+                error: function (error) {
+                    alert(error.responseJSON.errorMessage);
+                },
+            })
+            
+        }
         function number2decimals(num) {
             return (Math.round(num * 100) / 100).toFixed(2);
         }
+        $(this).next("tr").toggleClass("hide");
     </script>
     <style>
         .card {
@@ -130,6 +199,9 @@
 
         html {
             overflow: auto;
+        }
+        .hide{
+            display:none;
         }
     </style>
 </head>
@@ -170,7 +242,7 @@
                             테스트
                         </th>
                         <th>
-                            <button> 수정</button><button> 삭제</button>
+                            <button onclick="pet_rewrite(this)"> 수정</button><button > 삭제</button>
                         </th>
                     </tr>
                 </tbody>

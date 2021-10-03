@@ -111,14 +111,13 @@ router.post("/rewrite/:writeId", checkloginware ,async(req,res)=>{
 //댓글 수정
 router.patch("/rewrite/:writeId", async(req,res)=>{
     const { writeId } = req.params;
-    const { rebody, username } = req.body;
-    write.findone({writeId})
+    const { rebody, reid  } = req.body;
+    write.findOne({writeId})
     .then(writes =>{
         if(writes != null){
-            let rewrites = writes["rewrite"];
-            doc = {rebody: rebody, pw: pw, username: username}
-            rewrites.append(doc)
-            write.updateOne({ writeId }, { $set: {rewrite: rewrites } });
+            let rewrites = writes.rewrite.id( reid );
+            rewrites.rebody = rebody;
+            writes.save();
             res.send({ result: "success" });
         }
         else{
@@ -126,17 +125,16 @@ router.patch("/rewrite/:writeId", async(req,res)=>{
         }
     })
 })
-//중첩스키마 공부중...
+//댓글 삭제
 router.delete("/rewrite/:writeId", async(req,res)=>{
     const { writeId } = req.params;
     const { reid } = req.body;
-    write.findone({writeId})
+    write.findOne({writeId})
     .then(writes =>{
         if(writes != null){
-            let rewrites = writes["rewrite"];
-            doc = {rebody: rebody, pw: pw, username: username}
-            rewrites.append(doc)
-            write.updateOne({ writeId }, { $set: {rewrite: rewrites } });
+            let rewrites = writes.rewrite.id(reid);
+            rewrites.remove();
+            writes.save();
             res.send({ result: "success" });
         }
         else{
