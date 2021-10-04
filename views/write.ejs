@@ -108,6 +108,7 @@
             let rebody = $("#rebody").val()
             if(name == ""|| rebody == ""){
                 alert("빈칸이 없게 해주세요")
+                return;
             }
             $.ajax({
                 type: "POST",
@@ -153,6 +154,7 @@
                 },
                 error: function (error) {
                     alert(error.responseJSON.errorMessage);
+                    window.location.reload();
                 },
             })
             
@@ -172,6 +174,9 @@
         }
         //댓글삭제
         function del_rewrite(test) {
+            if(confirm("정말 삭제하시겠습니까??") == false){
+                return;
+            }
             const reid = $(test).parents("tr").attr('val')
             $.ajax({
                 type: "DELETE",

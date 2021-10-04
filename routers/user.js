@@ -78,7 +78,12 @@ router.post("/upusers", async (req, res) => {
         res.status(400).send({ errorMessage : "닉네임을 확인하세요"})
         return;
     }
-    if(!/^[]{4,}[^${name}]/gi.test(pw)){
+    if(!/^[0-9a-z]{4,}/gi.test(pw)){
+        res.status(400).send({ errorMessage :"비밀번호가 4자 이하거나 닉네임과 같은 값이 있습니다."})
+        return;
+    }
+    var re3 = new RegExp(name, 'gi');
+    if(re3.test(pw)){
         res.status(400).send({ errorMessage :"비밀번호가 4자 이하거나 닉네임과 같은 값이 있습니다."})
         return;
     }

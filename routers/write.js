@@ -1,6 +1,7 @@
 const express = require("express");
 const write = require("../schemas/write");
 const checkloginware = require("../middlewares/usermid")
+const checkuseridware = require("../middlewares/userchekmid")
 const v1 = require("uuid")
 var cookie = require('cookie-parser');
 
@@ -109,7 +110,7 @@ router.post("/rewrite/:writeId", checkloginware ,async(req,res)=>{
     })
 })
 //댓글 수정
-router.patch("/rewrite/:writeId", async(req,res)=>{
+router.patch("/rewrite/:writeId",checkuseridware ,async(req,res)=>{
     const { writeId } = req.params;
     const { rebody, reid  } = req.body;
     write.findOne({writeId})
@@ -118,15 +119,15 @@ router.patch("/rewrite/:writeId", async(req,res)=>{
             let rewrites = writes.rewrite.id( reid );
             rewrites.rebody = rebody;
             writes.save();
-            res.send({ result: "success" });
+            res.status(200).send({ result: "success" });
         }
         else{
-            res.send({result:"err"})
+            res.status(401).send({result:"err"})
         }
     })
 })
 //댓글 삭제
-router.delete("/rewrite/:writeId", async(req,res)=>{
+router.delete("/rewrite/:writeId",checkuseridware ,async(req,res)=>{
     const { writeId } = req.params;
     const { reid } = req.body;
     write.findOne({writeId})
