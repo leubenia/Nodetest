@@ -19,7 +19,7 @@
     "install": "^0.13.0",
     "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.7",
+    "mongoose": "^6.0.8",
     "node-ninja": "^1.0.2",
     "npm": "^7.24.1",
     "sexpress": "^0.7.82",

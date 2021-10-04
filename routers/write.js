@@ -28,12 +28,22 @@ router.get("/write", async (req, res, next) => {
 //게시물 한가지만 조회
 router.get("/write/:writeId", async (req, res) => {
     const {writeId} = req.params;
-    const writes = await write.findOne({writeId: writeId });
-    if(writes == null){
+    //const writes = await write.findOne({writeId: writeId });
+    const test = await write.findOneAndUpdate(
+        {writeId:writeId},
+        {
+            $push:{
+                rewrite:{
+                    $each:[], $sort:{_id:-1}
+                }
+            }
+        });
+    console.log(test);
+    if(test == null){
         res.send({ result: "게시물이존재하지않습니다." });
     }
     else{
-        res.json({ detail: writes });
+        res.json({ detail: test });
     }
 });
 

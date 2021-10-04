@@ -116,6 +116,8 @@
                 data: {rebody:rebody,username: name},
                 success: function (response) {
                     alert(response["result"])
+                    
+                    get_write()
                     window.location.reload();
                 },
                 error: function (error) {
