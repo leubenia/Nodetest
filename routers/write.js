@@ -38,7 +38,6 @@ router.get("/write/:writeId", async (req, res) => {
                 }
             }
         });
-    console.log(test);
     if(test == null){
         res.send({ result: "게시물이존재하지않습니다." });
     }
