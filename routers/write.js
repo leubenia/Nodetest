@@ -88,7 +88,7 @@ router.patch("/write/:writeId", async (req, res) => {
     const { title, name, body, pw } = req.body;
     const iswrite = await write.find({ writeId });
     if (iswrite.length > 0) {
-        console.log(iswrite[0]["pw"])
+        
         if(pw == iswrite[0]["pw"]){
             await write.updateOne({ writeId }, { $set: { title , name, body} });
             res.send({ result: "success" });
