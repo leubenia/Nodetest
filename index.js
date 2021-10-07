@@ -16,7 +16,8 @@ app.use(express.static('public'));
 
 const writeRouter = require("./routers/write");
 app.use("/api", [writeRouter]);
-
+const likedodo = require("./routers/like");
+app.use("/love", [likedodo]);
 
 //이건 세션
 app.use(session({
@@ -37,6 +38,7 @@ app.use((req, res, next) => {
   if(req.cookies.user != null){
     let decoded = jwt.verify(req.cookies.user, secretObj.secret);
     res.locals.mysess = decoded["name"];
+
   }
   else{
     res.locals.mysess = ""

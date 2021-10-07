@@ -28,7 +28,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
 
 
-
+    <script type="text/javascript" src="../public/static/mysrc.js"></script>
     <link href="/static/mystyle.css" rel="stylesheet">
     <title>르베니아 게시판 | 게시판</title>
     <script>
@@ -36,9 +36,14 @@
         const urlParams = new URLSearchParams(queryString);
         const writeId = urlParams.get("writeId");
         let frewrite = "";
+        let tolike = 0;
+        let user;
+        let isuserid ;
+        usercall(function(a){
+            user = a;
+        })
         $(document).ready(function () {
             get_write()
-            console.log(writeId)
         })
 
         function sign_out() {
@@ -51,6 +56,8 @@
         function get_write() {
             $("#body").empty()
             $("#write").empty();
+            let tolike = 0;
+            let todslike = 0;
             console.log(writeId)
             $.ajax({
                 type: "GET",
@@ -63,20 +70,38 @@
                     }
                     else{
                         
+                        console.log(tolike)
                         make_card(write)
-                        
+                        console.log(write['like'])
+                        let a = write['like'].length;
+
                         for(rewr of write["rewrite"]){
                             make_re(rewr)
-                            
                         }
-                        
+                        if(write['like'].length){
+                            tolike = write['like'].length;
+                            usercall(function(a){
+                                user = a;
+                            })
+                            for(liketo of write['like']){
+                                if(!liketo['like']){
+                                    tolike--;
+                                }
+                                if(liketo['name'] == user.name){
+                                    isuserid = liketo['_id'];
+                                }
+                            }
+                            console.log(todslike)
+                            $(toitlike).text(tolike);
+                        }
+
                     }
                 }
             })
         }
         function make_card(item) {
             let htmlTemp = `
-            <p><h1>${item['title']}</h1></p>
+            <p><h1>${item['title']}</h1><i class="fa fa-heart-o" style="color: #44e2a5"> Like</i>${tolike}</p>
             <p>${item['name']}</p>
             <div class="jumbotron">
             <h1>${item['body']}</h1>
@@ -87,12 +112,13 @@
             $("#body").append(htmlTemp)
         }
         function make_re(item){
-            let htmlTemp =`<tr val = "${item["_id"]}">
+            let htmlTemp =`
+            <tr val = "${item["_id"]}">
                 <th>
                     ${item["username"]}
                 </th>
                 <th id = "test">
-                    <input type="text" id = "name" placeholder="작성자입력" value="${item["rebody"]}" readonly>
+                    <input type="text" id = "name" placeholder="댓글내용입력 해주세요" value="${item["rebody"]}" readonly>
                 </th>
                 <th>
                     <button onclick="pat_rewrite(this)"> 수정</button><button onclick="del_rewrite(this)"> 삭제</button>
@@ -104,9 +130,10 @@
         }
         //댓글작성
         function up_rewrite() {
-            let name = $("#name").val()
+            let name = $("#toname").val()
             let rebody = $("#rebody").val()
-            if(name == ""|| rebody == ""){
+            if(rebody == ""){
+                $("#rebody").focus();
                 alert("빈칸이 없게 해주세요")
                 return;
             }
@@ -116,7 +143,6 @@
                 data: {rebody:rebody,username: name},
                 success: function (response) {
                     alert(response["result"])
-                    
                     get_write()
                     window.location.reload();
                 },
@@ -138,6 +164,8 @@
             frewrite = $(a).children("#test").children("#name").val();
             //console.log($(test).parent().children("button"))
             $(test).parent().children("button").toggleClass("hide");
+            $(a).children("#test").children("#name").val("") 
+            
             
         }
         //수정 완료!
@@ -197,9 +225,53 @@
         function number2decimals(num) {
             return (Math.round(num * 100) / 100).toFixed(2);
         }
-        $(this).next("tr").toggleClass("hide");
+
+        function test() {
+            $('#like').removeClass('active');
+            $('#dslike').addClass('active');
+        }
+
+        //조아요
+        function likedo(){
+            let name = $("#toname").val()
+            $.ajax({
+                type: "PATCH",
+                url: `/love/like/${writeId}`,
+                data: {like : true, name: name, likeid : isuserid},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload();
+                },
+                error: function (error) {
+                    alert(error.responseJSON.errorMessage);
+                },
+            })
+        }
+        //시러요
+        function dslikedo(){
+            let name = $("#name").val()
+            console.log(isuserid)
+            $.ajax({
+                type: "PATCH",
+                url: `/love/like/${writeId}`,
+                data: {dslike : true, name: name, likeid : isuserid},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload();
+                },
+                error: function (error) {
+                    alert(error.responseJSON.errorMessage);
+                    console.log(error)
+                },
+            })
+        }
+
     </script>
     <style>
+        .active {
+            background-color: #ff71d5 !important;
+            color: #44e2a5 !important;
+            }
         .card {
             cursor: pointer;
         }
@@ -210,18 +282,45 @@
         .hide{
             display:none;
         }
+        .feeling_div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          } 
+          .button-container {
+            margin-left: 20px;
+          }
+          .feeling_a {
+            background-color: #fff;
+            border: 2px solid #44e2a5;
+            padding: 10px 20px;
+            border-radius: 2px;
+            color: #44e2a5;
+          }    
     </style>
 </head>
 
 <body>
     <%- include('header') %>
     <div id = "body">
-        <p><h1>제목</h1></p>
+        <p><h1>제목</h1><i class="fa fa-heart-o" id = "toitlike"style="color: #44e2a5"> Like</i>123</p>
         <p>작성자</p>
         <div class="jumbotron">
         <h1>글내용입니다.</h1>
         <p>날자</p>
         <p><a class="btn btn-primary btn-lg" href="/delwrite?writeId=1" role="button">수정,삭제</a></p>
+        </div>
+    </div>
+    <div class="feeling_div">
+        <div class="button-container like-container">
+            <button class="feeling_a  active" id = "like" onclick="likedo()">
+              <i class="fa fa-heart-o "> Like</i>    
+            </a>
+          </div>
+          <div class="button-container dislike-container">
+            <button class="feeling_a" id = "dslike" onclick="dslikedo()">
+              <i class="fa fa-heart"> Dislike</i>
+            </a>
         </div>
     </div>
     <div class="wrap">
@@ -230,7 +329,7 @@
                 <thead>
                     <tr>
                         <th>
-                            <input type="text" id="name" placeholder="비로그인 작성불가" value="<% if(mysess){ %><%= id %><% } %>" readonly>
+                            <input type="text" id="toname" placeholder="비로그인 작성불가" value="<% if(mysess){ %><%= id %><% } %>" readonly>
                         </th>
                         <th>
                             <input type="text" id="rebody" placeholder="댓글">

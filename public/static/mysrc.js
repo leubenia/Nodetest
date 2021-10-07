@@ -15,8 +15,20 @@ function uncallSelf() {
       type: "GET",
       url: "/userdo/checkid",
       success: function (response) {
-          alert(response["doit"]);
+          alert(response["doit"]["msg"]);
           window.location.href = "/";
+      },
+      error: function (error) {
+      },
+    });
+  }
+
+function usercall(callback) {
+    $.ajax({
+      type: "GET",
+      url: "/userdo/checkid",
+      success: function (response) {
+        callback(response["doit"]["user"]);
       },
       error: function (error) {
       },

@@ -74,8 +74,20 @@ router.post("/upusers",douser ,async (req, res) => {
 
 //유저 체크
 router.get("/checkid",checkloginware ,async(req, res)=>{
-    res.status(200).send({doit : "로그인이 되어 있습니다."})
+    const { user } = res.locals;
+    
+    test = {
+        name : user.name,
+        id : user.id
+    }
+    doit = {
+        user : test,
+        msg : "로그인 되어있음요.!"
+    }
+    res.status(200).send({doit : doit})
 })
+
+
 
 
 

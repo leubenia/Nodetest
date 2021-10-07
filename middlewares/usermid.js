@@ -17,6 +17,8 @@ module.exports = (req, res, next) => {
     const { id } = jwt.verify(token, secretObj.secret);
     console.log(id);
     User.findOne({ id }).then((user) => {
+      
+      res.locals.user = user;
       next();
     });
   } catch (error) {

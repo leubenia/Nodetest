@@ -1,3 +1,4 @@
+const { boolean } = require("joi");
 const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
@@ -10,6 +11,16 @@ const rewriteSchema = new Schema({
   },
   username:{
     type: String
+  }
+})
+const like = new Schema({
+  like:{
+    type: Boolean
+  },
+  name:{
+    type: String,
+    required: true,
+    unique: true
   }
 })
 
@@ -45,7 +56,12 @@ const writeSchema = new Schema({
   rewrite: {
     type: [rewriteSchema],
     required: false
+  },
+  like:{
+    type: [like],
+    required: false
   }
+
 });
 
 module.exports = mongoose.model("write", writeSchema);
