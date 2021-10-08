@@ -68,19 +68,10 @@
                         alert("게시글존재하지않음")
                     }
                     else{
-                        
-                        console.log(tolike)
                         make_card(write)
-                        console.log(write['like'])
-
                         for(rewr of write["rewrite"]){
                             make_re(rewr)
                         }
-                        if(write['like'].length){
-                            console.log(checklikeunm(write))
-                            console.log(isuserid)
-                        }
-
                     }
                 }
             })
@@ -303,7 +294,7 @@
     </div>
     <div class="feeling_div">
         <div class="button-container like-container">
-            <button class="feeling_a  active" id = "like" onclick="likedo()">
+            <button class="feeling_a" id = "like" onclick="likedo()">
               <i class="fa fa-heart-o "> Like</i>    
             </a>
           </div>

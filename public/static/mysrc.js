@@ -35,7 +35,6 @@ function usercall(callback) {
 
 function checklikeunm(write) {
   let tolike = 0;
-  console.log(tolike);
   usercall(function (a) {
     if (a == null) {
       user.name = "";
@@ -46,18 +45,18 @@ function checklikeunm(write) {
   for (liketo of write["like"]) {
     if (liketo["like"]) {
       tolike++;
-      console.log(liketo["like"]);
     }
     if (!liketo["like"]) {
       tolike--;
-      console.log(liketo["like"]);
     }
     if (liketo["name"] == user.name) {
       isuserid = liketo["_id"];
-      console.log(isuserid);
+      if (liketo["like"]) {
+        $("#like").toggleClass("active");
+      }else{
+        $("#dslike").toggleClass("active");
+      }
     }
-    console.log(tolike);
   }
-  console.log(tolike);
   return tolike;
 }
