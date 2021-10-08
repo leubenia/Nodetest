@@ -30,11 +30,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
 
     
-
+    <script type="text/javascript" src="../public/static/mysrc.js"></script>
     <link href="/static/mystyle.css" rel="stylesheet">
     <title>르베니아 게시판 | 게시판</title>
     <script>
-        
+        let user = {name: ""};
         $(document).ready(function () {
             get_write()
         })
@@ -63,6 +63,10 @@
         }
 
         function make_card(item) {
+            let num = 0;
+            if(item['like'].length){
+                num = checklikeunm(item);
+            }
             let htmlTemp = `<tr val = ${item["writeId"]}>
                 <th>
                     ${item["name"]}
@@ -74,7 +78,7 @@
                     ${item["date"]}
                 </th>
                 <th>
-                    <img src="../public/static/hert.png" id = "test">1
+                    <img src="../public/static/hert.png" id = "test">${num}
                 </th>
             </tr>`
             $("#write").append(htmlTemp)

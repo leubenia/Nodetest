@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const connect = () => {
   mongoose
-    .connect("mongodb://localhost:27017/voyage", {
-    //.connect("mongodb://dodo:dodo1@127.0.0.1:27017/voyage?authSource=admin", {
+    //.connect("mongodb://localhost:27017/voyage", {
+    .connect("mongodb://dodo:dodo1@127.0.0.1:27017/voyage?authSource=admin", {
         useNewUrlParser: true, 
         ignoreUndefined: true  
     })

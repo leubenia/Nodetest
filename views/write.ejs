@@ -37,7 +37,7 @@
         const writeId = urlParams.get("writeId");
         let frewrite = "";
         let tolike = 0;
-        let user;
+        let user = {name: ""};
         let isuserid ;
         usercall(function(a){
             user = a;
@@ -52,12 +52,11 @@
             window.location.href = "/"
         }
 
+
         //글내용가져오기
         function get_write() {
             $("#body").empty()
             $("#write").empty();
-            let tolike = 0;
-            let todslike = 0;
             console.log(writeId)
             $.ajax({
                 type: "GET",
@@ -73,26 +72,13 @@
                         console.log(tolike)
                         make_card(write)
                         console.log(write['like'])
-                        let a = write['like'].length;
 
                         for(rewr of write["rewrite"]){
                             make_re(rewr)
                         }
                         if(write['like'].length){
-                            tolike = write['like'].length;
-                            usercall(function(a){
-                                user = a;
-                            })
-                            for(liketo of write['like']){
-                                if(!liketo['like']){
-                                    tolike--;
-                                }
-                                if(liketo['name'] == user.name){
-                                    isuserid = liketo['_id'];
-                                }
-                            }
-                            console.log(todslike)
-                            $(toitlike).text(tolike);
+                            console.log(checklikeunm(write))
+                            console.log(isuserid)
                         }
 
                     }
@@ -100,8 +86,12 @@
             })
         }
         function make_card(item) {
+            let num = 0;
+            if(item['like'].length){
+                num = checklikeunm(item);
+            }
             let htmlTemp = `
-            <p><h1>${item['title']}</h1><i class="fa fa-heart-o" style="color: #44e2a5"> Like</i>${tolike}</p>
+            <p><h1>${item['title']}</h1><i class="fa fa-heart-o" style="color: #44e2a5"> Like</i>${num}</p>
             <p>${item['name']}</p>
             <div class="jumbotron">
             <h1>${item['body']}</h1>
