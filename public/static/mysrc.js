@@ -52,7 +52,7 @@ function checklikeunm(write) {
       tolike--;
       console.log(liketo["like"]);
     }
-    if (user.name || liketo["name"] == user.name) {
+    if (liketo["name"] == user.name) {
       isuserid = liketo["_id"];
       console.log(isuserid);
     }

@@ -20,14 +20,14 @@ module.exports = async(req, res, next) => {
     return;
   }
   const exisUsers = await User.find({ id });
-  if (exisUsers) {
+  if (exisUsers.length) {
     res.status(400).send({
       errorMessage: "이미 가입된 아이디.",
     });
     return;
   }
   const exisUsersname = await User.find({ name });
-  if (exisUsersname) {
+  if (exisUsersname.length) {
     res.status(400).send({
       errorMessage: "이미 가입된 닉네임.",
     });
